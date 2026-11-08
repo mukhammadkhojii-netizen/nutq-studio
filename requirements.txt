@@ -1,0 +1,5 @@
+fastapi>=0.115
+uvicorn[standard]>=0.30
+edge-tts>=7.0
+httpx>=0.27
+# ixtiyoriy (pullik provayderlar kalit bilan): naiuz>=0.1.1

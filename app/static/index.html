@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Nutq Studio — oʻzbek, rus va ingliz tilida ovoz yaratish</title>
+<style>
+:root{--bg:#f6f5fb;--card:#fff;--ink:#16142a;--mute:#6f6c88;--line:#e6e3f3;--acc:#6d4aff;--acc2:#5a38e6;--onacc:#fff;--soft:#efebff;--ok:#18a874;--err:#d93a4a}
+@media (prefers-color-scheme:dark){:root{--bg:#0e0d18;--card:#17162a;--ink:#f1f0fb;--mute:#9a97b8;--line:#2a2845;--acc:#8b6dff;--acc2:#a28aff;--onacc:#0e0d18;--soft:#231f45;--ok:#37d39b;--err:#ff6b7a;color-scheme:dark}}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:Inter,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;line-height:1.5}
+.app{display:grid;grid-template-columns:220px 1fr;min-height:100vh}
+aside{border-right:1px solid var(--line);padding:18px 12px;position:sticky;top:0;height:100vh;display:flex;flex-direction:column;gap:4px}
+.brand{display:flex;align-items:center;gap:10px;padding:4px 10px 16px;font-weight:700;font-size:18px}
+.logo{width:34px;height:34px;border-radius:10px;background:linear-gradient(135deg,var(--acc),#c04dff);color:#fff;display:grid;place-items:center}
+.nav{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:10px;border:0;background:none;color:var(--mute);font:inherit;font-weight:500;cursor:pointer;text-align:left}
+.nav:hover,.nav.on{background:var(--soft)}.nav.on{color:var(--acc)}
+.pill{margin-top:auto;font-size:12px;color:var(--mute);padding:10px;border:1px dashed var(--line);border-radius:10px}
+main{padding:28px 32px 60px;max-width:1080px;width:100%}
+h1{font-size:28px;margin:0 0 4px;letter-spacing:-.02em}
+.sub{color:var(--mute);margin:0 0 18px}
+.grid{display:grid;grid-template-columns:1fr 320px;gap:16px;align-items:start}
+.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:16px}
+h3{margin:0 0 10px;font-size:14px}
+textarea{width:100%;min-height:230px;resize:vertical;border:1px solid var(--line);border-radius:12px;padding:12px;font:inherit;font-size:16px;background:transparent;color:var(--ink)}
+textarea:focus,select:focus,input:focus{outline:2px solid var(--acc);outline-offset:1px}
+.meta{display:flex;justify-content:space-between;color:var(--mute);font-size:13px;margin:6px 2px 10px}
+label{display:block;font-size:12px;color:var(--mute);margin:10px 0 4px;font-weight:500}
+.lab{display:flex;justify-content:space-between}
+select,input[type=search]{width:100%;padding:10px;border-radius:10px;border:1px solid var(--line);background:var(--card);color:var(--ink);font:inherit}
+input[type=range]{width:100%;accent-color:var(--acc)}
+button{font:inherit;border:1px solid var(--line);background:var(--card);color:var(--ink);padding:9px 14px;border-radius:10px;cursor:pointer}
+button:hover{border-color:var(--acc)}button:disabled{opacity:.45;cursor:default}
+button.main{background:var(--acc);color:var(--onacc);border-color:var(--acc);font-weight:600}
+.btns{display:flex;gap:8px;flex-wrap:wrap}
+.chips{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px}
+.chip{padding:6px 14px;font-size:13px;border-radius:999px;background:var(--soft);border:1px solid transparent;cursor:pointer;color:var(--ink)}
+.chip.on{border-color:var(--acc);color:var(--acc);font-weight:600}
+.wave{display:flex;align-items:center;gap:3px;height:34px;margin:12px 0 6px}
+.wave i{flex:1;max-width:5px;height:6px;border-radius:3px;background:var(--acc);opacity:.35}
+.speaking .wave i{opacity:1;animation:w .9s ease-in-out infinite}
+@keyframes w{0%,100%{height:6px}50%{height:30px}}
+.bar{height:4px;background:var(--soft);border-radius:2px;overflow:hidden}
+.bar b{display:block;height:100%;width:0;background:var(--acc);transition:width .2s}
+.st{font-size:13px;color:var(--mute);margin-top:6px}.st.err{color:var(--err)}
+.tab{display:none}.tab.on{display:block}
+.line{display:grid;grid-template-columns:190px 1fr auto;gap:10px;align-items:start;margin-bottom:10px}
+.line textarea{min-height:64px}
+.badge{display:inline-block;width:26px;height:26px;border-radius:50%;background:var(--acc);color:var(--onacc);font-size:13px;font-weight:700;text-align:center;line-height:26px;margin-bottom:6px}
+.lib{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:12px;margin-top:14px}
+.vc{display:flex;flex-direction:column;gap:6px}.vc b{word-break:break-word}
+.tag{font-size:11px;padding:2px 8px;border-radius:999px;background:var(--soft);color:var(--mute);display:inline-block;margin:0 4px 2px 0}
+.tag.p{background:var(--ok);color:#06251a;font-weight:600}
+.hi{display:flex;gap:10px;align-items:center;padding:10px 0;border-bottom:1px solid var(--line)}
+.hi span{flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.hi small{color:var(--mute)}
+.tip{background:var(--soft);border-radius:12px;padding:12px 14px;font-size:13px;margin-bottom:16px}
+.tip.err{border:1px solid var(--err)}
+@media(max-width:860px){
+ .app{grid-template-columns:1fr}
+ aside{position:fixed;bottom:0;left:0;right:0;top:auto;height:auto;flex-direction:row;justify-content:space-around;background:var(--card);z-index:5;padding:6px 6px calc(6px + env(safe-area-inset-bottom,0px));border-top:1px solid var(--line);border-right:0}
+ .brand,.pill{display:none}.nav{flex-direction:column;gap:2px;font-size:11px;padding:6px 8px}
+ main{padding:20px 14px 100px}.grid{grid-template-columns:1fr}.line{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+<div class="app">
+<aside>
+  <div class="brand"><div class="logo">N</div>Nutq Studio</div>
+  <button class="nav on" data-t="tts">🎙️ Matn → Ovoz</button>
+  <button class="nav" data-t="dlg">💬 Dialog</button>
+  <button class="nav" data-t="lib">🎧 Ovozlar</button>
+  <button class="nav" data-t="his">🕘 Tarix</button>
+  <div class="pill">🇺🇿 UZ · 🇷🇺 RU · 🇬🇧 EN</div>
+</aside>
+<main>
+<div class="tip err" id="warn" hidden></div>
+
+<section class="tab on" id="tts">
+  <h1>Matnni tabiiy ovozga aylantiring</h1>
+  <p class="sub">Tilni tanlang, ovozni tanlang va tinglang.</p>
+  <div class="grid">
+    <div class="card">
+      <div class="chips" id="langs"></div>
+      <textarea id="text" maxlength="5000" placeholder="Matn kiriting..."></textarea>
+      <div class="meta"><span id="count">0 / 5000</span><span>Uzun matn jumlalarga boʻlinib oʻqiladi</span></div>
+      <div class="btns">
+        <button class="main" id="play">▶ Oʻqish</button>
+        <button id="pause" disabled>⏸ Pauza</button>
+        <button id="stop" disabled>⏹ Toʻxtatish</button>
+        <button id="wav" disabled>⬇ WAV</button>
+        <button id="clear">Tozalash</button>
+      </div>
+      <div class="wave" id="wave"></div>
+      <div class="bar"><b id="prog"></b></div>
+      <div class="st" id="status">Tayyor</div>
+    </div>
+    <div class="card">
+      <h3>Ovoz sozlamalari</h3>
+      <label for="voice">Ovoz</label><select id="voice"></select>
+      <label class="lab"><span>Tezlik</span><span id="spv"></span></label><input id="speed" type="range" min="0.6" max="1.6" step="0.05" value="1">
+      <label class="lab"><span>Barqarorlik (faqat ElevenLabs)</span><span id="sv"></span></label><input id="stab" type="range" min="0" max="1" step="0.05" value="0.5">
+      <label class="lab"><span>Jumlalar orasidagi pauza</span><span id="gv"></span></label><input id="gap" type="range" min="0" max="1.5" step="0.05" value="0.3">
+      <label class="lab"><span>Balandlik</span><span id="vv"></span></label><input id="vol" type="range" min="0" max="1" step="0.05" value="1">
+    </div>
+  </div>
+</section>
+
+<section class="tab" id="dlg">
+  <h1>Dialog — bir nechta ovoz</h1>
+  <p class="sub">Har bir qatorga alohida ovoz tanlang, tillarni aralashtirish mumkin.</p>
+  <div class="card">
+    <div id="lines"></div>
+    <div class="btns">
+      <button id="addLine">＋ Qator qoʻshish</button>
+      <button class="main" id="playDlg">▶ Dialogni oʻqish</button>
+      <button id="stopDlg">⏹ Toʻxtatish</button>
+      <button id="wavDlg" disabled>⬇ WAV</button>
+    </div>
+    <div class="bar" style="margin-top:12px"><b id="prog2"></b></div>
+    <div class="st" id="status2">Tayyor</div>
+  </div>
+</section>
+
+<section class="tab" id="lib">
+  <h1>Ovozlar kutubxonasi</h1>
+  <p class="sub">Barcha mavjud ovozlar. Tinglab koʻring va tanlang.</p>
+  <div class="chips" id="libLangs"></div>
+  <input type="search" id="q" placeholder="Qidirish...">
+  <div class="lib" id="libList"></div>
+</section>
+
+<section class="tab" id="his">
+  <h1>Tarix</h1>
+  <p class="sub">Oxirgi oʻqilgan matnlar.</p>
+  <div class="card" id="hisList"></div>
+</section>
+</main>
+</div>
+
+<script>
+const $=id=>document.getElementById(id);
+const LANGS={uz:'🇺🇿 Oʻzbekcha',ru:'🇷🇺 Русский',en:'🇬🇧 English'};
+const SAMPLE={uz:'Assalomu alaykum! Nutq Studio’ga xush kelibsiz. Bugun sizga qanday yordam bera olaman?',ru:'Здравствуйте! Добро пожаловать в Nutq Studio. Чем я могу вам сегодня помочь?',en:'Hello! Welcome to Nutq Studio. How can I help you today?'};
+let ALL=[],PROV={},lang='uz',libLang='';
+const ld=(k,d)=>{try{return JSON.parse(localStorage.getItem(k))||d}catch(e){return d}};
+const sv=(k,v)=>{try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}};
+let hist=ld('ns-hist',[]);
+const key=v=>v.provider+'|'+v.id;
+const byKey=k=>ALL.find(v=>key(v)===k);
+const forLang=l=>ALL.filter(v=>v.language===l||(v.language==='multi'&&l!=='uz'));
+const sleep=ms=>new Promise(r=>setTimeout(r,ms));
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+
+/* ---------- UI helpers ---------- */
+$('wave').innerHTML='<i></i>'.repeat(28);
+document.querySelectorAll('#wave i').forEach((b,i)=>b.style.animationDelay=(i%7)*.11+'s');
+function showVals(){$('spv').textContent=(+$('speed').value).toFixed(2)+'x';$('sv').textContent=(+$('stab').value).toFixed(2);$('gv').textContent=(+$('gap').value).toFixed(2)+' s';$('vv').textContent=Math.round($('vol').value*100)+'%'}
+['speed','stab','gap','vol'].forEach(i=>$(i).oninput=showVals);showVals();
+function chipRow(el,withAll,cur,cb){
+  const items=(withAll?[['','Hammasi']]:[]).concat(Object.entries(LANGS));
+  el.innerHTML=items.map(([k,n])=>`<span class="chip${k===cur?' on':''}" data-k="${k}" role="button" tabindex="0">${n}</span>`).join('');
+  el.querySelectorAll('.chip').forEach(c=>c.onclick=()=>cb(c.dataset.k));
+}
+const PN={edge:'Bepul',aisha:'Aisha AI',neuron:'Neuron AI',elevenlabs:'ElevenLabs'};
+function voiceLabel(v){return `${v.name} · ${v.language==='multi'?'RU/EN':v.language.toUpperCase()} · ${PN[v.provider]||v.provider}`}
+function fillVoice(sel,list,keep){
+  const prev=keep||sel.value;
+  sel.innerHTML=list.map(v=>`<option value="${esc(key(v))}">${esc(voiceLabel(v))}</option>`).join('')||'<option value="">Bu til uchun ovoz yoʻq</option>';
+  if(prev&&[...sel.options].some(o=>o.value===prev))sel.value=prev;
+}
+function setLang(l){
+  lang=l;chipRow($('langs'),false,lang,setLang);
+  fillVoice($('voice'),forLang(lang));
+  if(!$('text').value.trim()||Object.values(SAMPLE).includes($('text').value)){$('text').value=SAMPLE[lang];upd()}
+}
+function upd(){$('count').textContent=$('text').value.length+' / 5000'}
+$('text').oninput=upd;
+
+/* ---------- audio engine ---------- */
+let tok=0,paused=false,curAudio=null,curDone=null,blobs=[],lastGap=0;
+function chunkText(t){
+  const sents=t.replace(/\s+/g,' ').trim().match(/[^.!?…\n]+[.!?…]*/g)||[t];
+  const out=[];let buf='';
+  for(const s0 of sents){const s=s0.trim();if(!s)continue;
+    if(buf&&(buf+' '+s).length>280){out.push(buf);buf=s}else buf=buf?buf+' '+s:s;
+    if(/[?!]$/.test(s)&&buf.length>120){out.push(buf);buf=''}}
+  if(buf)out.push(buf);
+  return out.flatMap(c=>c.length<=580?[c]:c.match(/.{1,560}(\s|$)/g).map(x=>x.trim()));
+}
+async function fetchAudio(text,v){
+  const r=await fetch('/api/tts',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({text,voice_id:v.id,provider:v.provider,language:v.language==='multi'?'en':v.language,stability:+$('stab').value,speed:+$('speed').value})});
+  if(!r.ok){let m='Xatolik ('+r.status+')';try{m=(await r.json()).detail||m}catch(e){}throw new Error(typeof m==='string'?m:JSON.stringify(m))}
+  return r.blob();
+}
+function playBlob(b){
+  return new Promise(res=>{
+    const a=new Audio(URL.createObjectURL(b));a.volume=+$('vol').value;curAudio=a;curDone=res;
+    a.onended=a.onerror=()=>{URL.revokeObjectURL(a.src);res()};
+    a.play().catch(()=>res());
+  });
+}
+function haltAudio(){tok++;paused=false;if(curAudio){curAudio.pause();curAudio=null}if(curDone){curDone();curDone=null}}
+async function runJobs(jobs,ui){
+  haltAudio();const my=tok;blobs=[];lastGap=+$('gap').value*1000;
+  ui.state(true);
+  const P=[];const ask=i=>{if(i<jobs.length&&!P[i])P[i]=fetchAudio(jobs[i].text,jobs[i].voice)};
+  try{
+    ask(0);ask(1);
+    for(let i=0;i<jobs.length;i++){
+      ask(i+2);ui.status(`Oʻqilmoqda · ${i+1}/${jobs.length}`);ui.prog((i)/jobs.length*100);
+      const b=await P[i];if(my!==tok)return;
+      blobs.push(b);await playBlob(b);
+      if(my!==tok)return;
+      await sleep(lastGap+(jobs[i].extra||0));
+      while(paused&&my===tok)await sleep(100);
+      if(my!==tok)return;
+    }
+    ui.status('Tayyor');
+  }catch(e){ui.status(e.message,true)}
+  finally{if(my===tok){ui.state(false);ui.prog(0);ui.done()}}
+}
+function bufToWav(bufs,gapMs){
+  const sr=bufs[0].sampleRate,gap=Math.round(sr*gapMs/1000);
+  const total=bufs.reduce((s,b)=>s+b.length,0)+gap*(bufs.length-1);
+  const pcm=new Int16Array(total);let o=0;
+  bufs.forEach((b,bi)=>{
+    const ch=b.numberOfChannels;
+    for(let i=0;i<b.length;i++){let s=0;for(let c=0;c<ch;c++)s+=b.getChannelData(c)[i];s=Math.max(-1,Math.min(1,s/ch));pcm[o++]=s<0?s*32768:s*32767}
+    if(bi<bufs.length-1)o+=gap;
+  });
+  const h=new DataView(new ArrayBuffer(44));const w=(p,s)=>[...s].forEach((c,i)=>h.setUint8(p+i,c.charCodeAt(0)));
+  w(0,'RIFF');h.setUint32(4,36+pcm.length*2,true);w(8,'WAVEfmt ');h.setUint32(16,16,true);h.setUint16(20,1,true);h.setUint16(22,1,true);
+  h.setUint32(24,sr,true);h.setUint32(28,sr*2,true);h.setUint16(32,2,true);h.setUint16(34,16,true);w(36,'data');h.setUint32(40,pcm.length*2,true);
+  return new Blob([h,pcm],{type:'audio/wav'});
+}
+async function downloadWav(btn){
+  if(!blobs.length)return;btn.disabled=true;
+  try{
+    const ctx=new (window.AudioContext||window.webkitAudioContext)();
+    const bufs=[];for(const b of blobs)bufs.push(await ctx.decodeAudioData(await b.arrayBuffer()));
+    const a=document.createElement('a');a.href=URL.createObjectURL(bufToWav(bufs,lastGap));a.download='nutq-studio.wav';a.click();
+  }catch(e){alert('WAV yaratib boʻlmadi: '+e.message)}
+  btn.disabled=false;
+}
+
+/* ---------- TTS tab ---------- */
+const ttsUI={
+  state:on=>{document.body.classList.toggle('speaking',on);$('pause').disabled=!on;$('stop').disabled=!on;$('play').disabled=on;$('pause').textContent='⏸ Pauza'},
+  status:(m,e)=>{$('status').textContent=m;$('status').classList.toggle('err',!!e)},
+  prog:p=>$('prog').style.width=p+'%',
+  done:()=>$('wav').disabled=!blobs.length
+};
+$('play').onclick=()=>{
+  const t=$('text').value.trim(),v=byKey($('voice').value);
+  if(!t){ttsUI.status('Matn kiriting',true);return}
+  if(!v){ttsUI.status('Bu til uchun ovoz yoʻq. Sozlamalarni tekshiring.',true);return}
+  addHist(t);
+  runJobs(chunkText(t).map(c=>({text:c,voice:v})),ttsUI);
+};
+$('pause').onclick=()=>{
+  if(!curAudio&&!paused)return;
+  if(paused){paused=false;if(curAudio)curAudio.play();$('pause').textContent='⏸ Pauza';document.body.classList.add('speaking')}
+  else{paused=true;if(curAudio)curAudio.pause();$('pause').textContent='▶ Davom';document.body.classList.remove('speaking')}
+};
+$('stop').onclick=()=>{haltAudio();ttsUI.state(false);ttsUI.prog(0);ttsUI.status('Tayyor');$('wav').disabled=!blobs.length};
+$('wav').onclick=()=>downloadWav($('wav'));
+$('clear').onclick=()=>{$('text').value='';upd()};
+
+/* ---------- Dialog ---------- */
+const dl=[{t:'Assalomu alaykum! Bugun ishlar qalay?'},{t:'Привет! Спасибо, всё хорошо. А у вас?'},{t:'Great to hear that! Let’s get started.'}];
+function renderLines(){
+  const box=$('lines');box.innerHTML='';
+  dl.forEach((l,i)=>{
+    const d=document.createElement('div');d.className='line';
+    d.innerHTML=`<div><span class="badge">${String.fromCharCode(65+i)}</span><select></select></div><textarea>${esc(l.t)}</textarea><button aria-label="Oʻchirish" title="Oʻchirish">✕</button>`;
+    const s=d.querySelector('select');
+    const pref=ALL.filter(v=>v.language===['uz','ru','en'][i%3]).concat(ALL.filter(v=>v.language==='multi'));
+    fillVoice(s,ALL,l.v||(pref[0]?key(pref[0]):ALL[0]?key(ALL[0]):''));l.v=s.value;
+    s.onchange=()=>l.v=s.value;
+    d.querySelector('textarea').oninput=e=>l.t=e.target.value;
+    d.querySelector('button').onclick=()=>{if(dl.length>1){dl.splice(i,1);renderLines()}};
+    box.appendChild(d);
+  });
+}
+$('addLine').onclick=()=>{if(dl.length<8){dl.push({t:''});renderLines()}};
+const dlgUI={
+  state:on=>{$('playDlg').disabled=on},
+  status:(m,e)=>{$('status2').textContent=m;$('status2').classList.toggle('err',!!e)},
+  prog:p=>$('prog2').style.width=p+'%',
+  done:()=>$('wavDlg').disabled=!blobs.length
+};
+$('playDlg').onclick=()=>{
+  const jobs=[];
+  dl.forEach(l=>{const v=byKey(l.v);if(!v||!l.t.trim())return;const c=chunkText(l.t);c.forEach((x,i)=>jobs.push({text:x,voice:v,extra:i===c.length-1?350:0}))});
+  if(!jobs.length){dlgUI.status('Qator va ovozni tekshiring',true);return}
+  runJobs(jobs,dlgUI);
+};
+$('stopDlg').onclick=()=>{haltAudio();dlgUI.state(false);dlgUI.prog(0);dlgUI.status('Tayyor')};
+$('wavDlg').onclick=()=>downloadWav($('wavDlg'));
+
+/* ---------- Library ---------- */
+function renderLib(){
+  chipRow($('libLangs'),true,libLang,k=>{libLang=k;renderLib()});
+  const q=$('q').value.toLowerCase();
+  const list=ALL.filter(v=>(!libLang||v.language===libLang||(v.language==='multi'&&libLang!=='uz'))&&(!q||(v.name+v.tags.join(' ')).toLowerCase().includes(q)));
+  const box=$('libList');box.innerHTML=list.length?'':'<p class="sub">Ovoz topilmadi.</p>';
+  list.forEach(v=>{
+    const c=document.createElement('div');c.className='card vc';
+    c.innerHTML=`<b>${esc(v.name)}</b><div><span class="tag p">${PN[v.provider]||v.provider}</span><span class="tag">${v.language==='multi'?'RU / EN':v.language.toUpperCase()}</span>${v.tags.map(t=>`<span class="tag">${esc(t)}</span>`).join('')}</div><div class="btns"><button class="pv">▶ Tinglash</button><button class="us">Tanlash</button></div>`;
+    const pl=v.language==='multi'?(libLang==='ru'?'ru':'en'):v.language;
+    c.querySelector('.pv').onclick=e=>{
+      const b=e.target;b.disabled=true;
+      runJobs([{text:SAMPLE[pl]||SAMPLE.en,voice:v}],{state:()=>{},status:(m,er)=>{if(er)alert(m)},prog:()=>{},done:()=>{b.disabled=false}});
+    };
+    c.querySelector('.us').onclick=()=>{
+      lang=v.language==='multi'?(libLang==='ru'?'ru':'en'):v.language;
+      setLang(lang);$('voice').value=key(v);go('tts');
+    };
+    box.appendChild(c);
+  });
+}
+$('q').oninput=renderLib;
+
+/* ---------- History ---------- */
+function addHist(t){hist=[{t,d:Date.now(),l:lang},...hist.filter(h=>h.t!==t)].slice(0,30);sv('ns-hist',hist);renderHist()}
+function renderHist(){
+  const b=$('hisList');b.innerHTML=hist.length?'':'<p class="sub" style="margin:0">Hozircha boʻsh.</p>';
+  hist.forEach((h,i)=>{
+    const r=document.createElement('div');r.className='hi';
+    r.innerHTML=`<span>${esc(h.t)}</span><small>${new Date(h.d).toLocaleString('uz-UZ',{day:'2-digit',month:'2-digit',hour:'2-digit',minute:'2-digit'})}</small><button>Ochish</button><button aria-label="Oʻchirish">✕</button>`;
+    const bs=r.querySelectorAll('button');
+    bs[0].onclick=()=>{setLang(h.l||'uz');$('text').value=h.t;upd();go('tts')};
+    bs[1].onclick=()=>{hist.splice(i,1);sv('ns-hist',hist);renderHist()};
+    b.appendChild(r);
+  });
+}
+
+/* ---------- nav & init ---------- */
+function go(t){
+  document.querySelectorAll('.tab').forEach(s=>s.classList.toggle('on',s.id===t));
+  document.querySelectorAll('.nav').forEach(n=>n.classList.toggle('on',n.dataset.t===t));
+  window.scrollTo(0,0);
+}
+document.querySelectorAll('.nav').forEach(n=>n.onclick=()=>go(n.dataset.t));
+
+async function init(){
+  renderHist();
+  try{
+    const r=await fetch('/api/voices');const d=await r.json();
+    ALL=d.voices||[];PROV=d.providers||{};
+    const w=[];
+    if(!ALL.length)w.push('Ovozlar roʻyxati boʻsh. Server internetga chiqa olishini tekshiring.');
+    Object.entries(d.errors||{}).forEach(([k,v])=>w.push(k+': '+v));
+    if(w.length){$('warn').hidden=false;$('warn').innerHTML=w.map(esc).join('<br>')}
+  }catch(e){$('warn').hidden=false;$('warn').textContent='Serverga ulanib boʻlmadi: '+e.message}
+  setLang('uz');renderLines();renderLib();
+}
+init();
+</script>
+</body>
+</html>
